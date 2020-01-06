@@ -1,0 +1,19 @@
+{
+  "name": "node-backend",
+  "version": "1.0.0",
+  "description": "backend part of intention node project",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://millerrabin@bitbucket.org/intentionteam/node-backend.git"
+  },
+  "author": "millerrabin",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/intentionteam/node-backend#readme",
+  "dependencies": {
+    "intention-storage": "^0.1.4"
+  }
+}
