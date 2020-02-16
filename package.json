@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://millerrabin@bitbucket.org/intentionteam/node-backend.git"
+    "url": "https://github.com/MillerRabin/node-backend"
   },
   "author": "millerrabin",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/intentionteam/node-backend#readme",
+  "homepage": "https://github.com/MillerRabin/node-backend",
   "dependencies": {
-    "intention-storage": "^0.1.7"
+    "intention-storage": "^0.1.11"
   }
 }
