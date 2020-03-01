@@ -1,6 +1,6 @@
 {
   "name": "node-backend",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "backend part of intention node project",
   "main": "main.js",
   "scripts": {
