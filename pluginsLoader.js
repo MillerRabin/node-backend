@@ -37,6 +37,7 @@ function requestFromPluginsList(filepath, pkg) {
 function loadIntentions(intentionStorage, pkg, filepath) {
     if (pkg.intentionsMain == null) return;
     const plugin = requestFromPluginsList(filepath, pkg);
+    plugin.unload(intentionStorage);
     plugin.load(intentionStorage);
 }
 
