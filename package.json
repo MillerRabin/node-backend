@@ -16,7 +16,9 @@
   "license": "ISC",
   "homepage": "https://github.com/MillerRabin/node-backend",
   "dependencies": {
-    "intention-storage": "0.3.33",
-    "node-pre-gyp": "^0.17.0"
+    "intention-storage": "^0.3.33"
+  },
+  "devDependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.11"
   }
 }
