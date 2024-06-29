@@ -2,6 +2,7 @@
   "name": "node-backend",
   "version": "1.0.2",
   "description": "backend part of intention node project",
+  "type": "module",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,6 +16,7 @@
   "license": "ISC",
   "homepage": "https://github.com/MillerRabin/node-backend",
   "dependencies": {
-    "intention-storage": "^0.1.11"
+    "intention-storage": "0.3.33",
+    "node-pre-gyp": "^0.17.0"
   }
 }

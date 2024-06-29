@@ -1,21 +1,27 @@
-const fs = require('fs');
+import fs from 'fs';
 
 const productionSettings = {
-    address: 'node.raintech.su'
+  address: 'node.int-t.com'
 };
 
 const developSettings = {
-    address: 'localhost'
+  address: 'localhost'
 };
 
-if (exports.production == null)
-    exports.production = (process.argv[2] != 'debug');
+const production = (process.argv[2] != 'debug');
+const settings = production ? productionSettings : developSettings;
 
-exports.settings = exports.production ? productionSettings : developSettings;
+if (production)
+  settings.sslCert = {
+    key: fs.readFileSync('/etc/letsencrypt/live/node.int-t.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/node.int-t.com/fullchain.pem')
+  };
 
-if (exports.production)
-    exports.settings.sslCert = {
-        key: fs.readFileSync('/etc/letsencrypt/live/node.raintech.su/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/node.raintech.su/fullchain.pem')
-    };
+
+export default {
+  production,
+  settings
+};
+
+
 
