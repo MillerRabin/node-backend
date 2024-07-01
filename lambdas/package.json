@@ -1,0 +1,28 @@
+{
+  "name": "node-lambda",
+  "version": "1.0.0",
+  "description": "lambda intention network node",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "millerrabin",
+  "license": "ISC",
+  "dependencies": {
+    "@intention-network/core": "^0.0.34",
+    "@solana/web3.js": "^1.74.0",
+    "bip32": "^4.0.0",
+    "bip39": "^3.1.0",
+    "bitcoinjs-lib": "^6.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "jwt-decode": "^3.1.2",
+    "pg": "^8.10.0",
+    "tiny-secp256k1": "^2.2.1",
+    "web3": "^4.10.0"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.329.0",
+    "@aws-sdk/client-dynamodb": "^3.329.0",
+    "@aws-sdk/lib-dynamodb": "^3.329.0"
+  }
+}
