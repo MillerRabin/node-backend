@@ -1,6 +1,6 @@
 
 import postgres from "./postgres.mjs";
-import dynamoDB from "./dynamoDB.mjs";
+import memoryDB from "./memoryDB.mjs";
 import intentionDispatcher from "./intentionDispatcher.mjs";
 
 
@@ -11,13 +11,13 @@ async function getBroadcastReady(modules, storageId) {
 }
 
 async function addLinkedStorage(linkedStorage) {
-  await dynamoDB.addConnection(linkedStorage.storage.id, linkedStorage.id, linkedStorage.endpoint);
+  await memoryDB.addConnection(linkedStorage.storage.id, linkedStorage.id, linkedStorage.endpoint);
   return await postgres.addLinkedStorage(linkedStorage);
 }
 
 async function removeLinkedStorage(params) {
   const tId = Array.isArray(params.id) ? params.id : [params.id];
-  const dConns = tId.map(i => dynamoDB.removeConnection(params.storageId, i));
+  const dConns = tId.map(i => memoryDB.removeConnection(params.storageId, i));
   await Promise.allSettled(dConns);
   return await postgres.removeLinkedStorage(params);
 }
@@ -25,7 +25,7 @@ async function removeLinkedStorage(params) {
 
 export async function hasActiveConnections(modules, storageId) {
   const { channel } = modules;
-  const conns = await dynamoDB.getConnections(storageId);
+  const conns = await memoryDB.getConnections(storageId);
   const aConns = await Promise.allSettled(conns.map(c => channel.Channel.getConnection(c.connectionId,  c.endpoint)
     .catch(e => Promise.reject({ connection: c, cause: e })
   )));
