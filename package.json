@@ -1,24 +1,15 @@
 {
-  "name": "node-backend",
-  "version": "1.0.2",
-  "description": "backend part of intention node project",
-  "type": "module",
-  "main": "main.js",
+  "name": "node-lambda",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "node main.js debug"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/MillerRabin/node-backend"
-  },
-  "author": "millerrabin",
-  "license": "ISC",
-  "homepage": "https://github.com/MillerRabin/node-backend",
-  "dependencies": {
-    "intention-storage": "^0.3.33"
-  },
-  "devDependencies": {
-    "@mapbox/node-pre-gyp": "^1.0.11"
+    "init:dev": "cd deploy && terraform init",
+    "plan:dev": "cd deploy-dev && terraform plan",
+    "apply:dev": "cd deploy-dev && terraform apply -auto-approve",
+    "deploy:dev": "npm run plan:dev && npm run apply:dev",
+    "test": "mocha test --exit",
+    "test:prod": "mocha test --exit --prod",
+    "debug": "node localserver/main.js",
+    "ws_debug": "node ws_server/main.mjs"
   }
 }
