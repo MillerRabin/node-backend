@@ -39,7 +39,7 @@ async function handleConnection(type, connectionId, socket) {
 }
 
 async function observe() {
-  await intentionObserver({});
+  return await intentionObserver({});
 }
 
 export default {

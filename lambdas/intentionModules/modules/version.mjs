@@ -2,11 +2,6 @@ export function getFunctionName () {
   return process.env['AWS_LAMBDA_FUNCTION_NAME']?.toLowerCase() ?? null;
 }
 
-export function getStorageId () {  
-  return process.env['STORAGE_ID'];
-}
-
-
 export function getStage () {  
   const stage = process.env['STAGE']?.toLowerCase() ?? null;
   if (stage != null) return stage;
@@ -17,5 +12,5 @@ export function getStage () {
 }
 
 export default {
-  getStage, getFunctionName, getStorageId
+  getStage, getFunctionName
 }

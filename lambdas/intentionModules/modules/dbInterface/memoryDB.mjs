@@ -1,7 +1,8 @@
 const gConnections = {};
 
 function getConnections() {
-  return [...gConnections];
+  const vals = Object.values(gConnections);
+  return [...vals];
 }
 
 function getKey(storageId, connectionId) {

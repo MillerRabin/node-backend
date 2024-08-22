@@ -1,10 +1,10 @@
 import { WebSocketServer } from "ws";
-import { port } from './config.mjs';
+import config from '../lambdas/intentionModules/modules/config.mjs';
 import { v4 as get_uuid } from 'uuid';
 import dispatcher from './dispatcher.mjs';
 
-const wss = new WebSocketServer({ port });
-console.log(`Websocket was created at port ${port}`)
+const wss = new WebSocketServer({ port: config.storage.port });
+console.log(`Websocket was created at port ${ config.storage.port }`)
 
 wss.on('connection', (ws, req) => {
   const key = get_uuid();
@@ -38,7 +38,19 @@ wss.on('connection', (ws, req) => {
   });
 });
 
-dispatcher.observe();
-setInterval(() => {
-  dispatcher.observe();
-}, 20000)
+
+async function observe() {
+  await dispatcher.observe();
+}
+
+async function startObserver() {
+  try {
+    await observe();
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setTimeout(startObserver, 20000);
+  }
+}
+
+startObserver();

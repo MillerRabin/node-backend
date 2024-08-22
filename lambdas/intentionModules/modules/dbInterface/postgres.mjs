@@ -1,11 +1,12 @@
 import { writePool, readPool } from "../db.mjs";
 import intentionDispatcher from "./intentionDispatcher.mjs";
+import config from "../config.mjs";
 
 
 export async function getBroadcastReady(storageId) {
   if (storageId == null) throw new Error("storage id can't be null");
   const values = [];
-  const text = `select * from node.broadcast_ready where (storage_name = $${values.push(storageId)})`;
+  const text = `select * from node.broadcast_ready where id <> $${values.push(storageId)}`;
   const res = await readPool.query({ text, values });
   return res.rows
 }
@@ -14,9 +15,8 @@ export async function getIntentionById(id) {
   if (id == null) throw new Error('Id is expected');
   const values = [];
   const text = `
-    select id, storage_id, input, output, title, description, ondata,
-		       case when storage_id is null then 'Intention' else 'NetworkIntention' end as type,
-		       create_time, interface, accepting.intentions as accepting, accepted.intentions as accepted
+    select id, storage_id, input, output, title, description, ondata,		       
+		       created_at, interface, accepting.intentions as accepting, accepted.intentions as accepted
     from node.intentions i
     left join (
       select owner_id, array_agg(intention_id) as intentions from node.accepting
@@ -41,8 +41,8 @@ export async function getIntentionById(id) {
       onData: intentionDispatcher,
       interfaceObject: r.interface,
       dataPath: r.ondata,
-      type: r.type,
-      createTime: r.create_time,
+      type: (r.storage_id == config.storage.id) ? 'Intention' : 'NetworkIntention',
+      createTime: r.created_at,
       accepted: {
         accepted: r.accepting,
         accepting: r.accepted
@@ -56,7 +56,7 @@ export async function getIntentionById(id) {
 export async function addLinkedStorage(linkedStorage) {  
   const values = [];
   const text = `
-    insert into node.connections ( id, origin, port, schema, handling, storage_id, source_ip, endpoint)
+    insert into node.connections ( id, origin, port, schema, handling, storage_name, source_ip, endpoint, env)
     values (
       $${values.push(linkedStorage.id)},
       $${values.push(linkedStorage.origin)},
@@ -65,15 +65,16 @@ export async function addLinkedStorage(linkedStorage) {
       $${values.push(linkedStorage.handling)},
       $${values.push(linkedStorage.storage.id)},
       $${values.push(linkedStorage.sourceIp)},
-      $${values.push(linkedStorage.endpoint)}
+      $${values.push(linkedStorage.endpoint)},
+      $${values.push(config.stage)}
     )
     on conflict (id) do update
       set 
         origin = excluded.origin,
         port = excluded.port,
         schema = excluded.schema,        
-        storage_id = excluded.storage_id        
-    returning id, origin, port, schema, handling, storage_id, source_ip, endpoint
+        storage_name = excluded.storage_name        
+    returning id, origin, port, schema, handling, storage_name, source_ip, endpoint
   `;
   const res = await writePool.query({ text, values });
   return res.rows
@@ -86,7 +87,7 @@ export async function addIntention(intention) {
 async function saveIntention(intention) {
   const values = [];  
   const text = `
-      insert into node.intentions ( id, storage_id, input, output, title, description, ondata, create_time)
+      insert into node.intentions ( id, storage_id, input, output, title, description, ondata, created_at)
       values (
         $${values.push(intention.id)},
         $${values.push(intention.storage.id)},
@@ -104,7 +105,7 @@ async function saveIntention(intention) {
         output = excluded.output,
         title = excluded.title,
         description = excluded.description,
-        create_time = excluded.create_time
+        created_at = excluded.created_at
   `;  
   const res = await writePool.query({ text, values });
   return res.rows;  
@@ -134,13 +135,11 @@ export async function getStorageLinks({ storageId, id }) {
   return res.rows;
 }
 
-export async function removeLinkedStorage({ storageId, id }) {
+export async function removeLinkedStorage({ id }) {
   if (id == null) throw new Error('id expected');  
-  if (storageId == null) throw new Error('storageId expected');
   const ids = Array.isArray(id) ? id : [id];
   const values = [];
   const where = [];
-  where.push(`storage_id = $${values.push(storageId)}`);
   where.push(`id = any($${values.push(ids)})`);
 
   const text = `
