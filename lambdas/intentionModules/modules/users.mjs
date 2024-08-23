@@ -25,7 +25,7 @@ async function callInterface(interfaceObject, value) {
 export async function addUser({ deviceId, userName, voiceHash, email = null }) {
   const values = [deviceId, userName, voiceHash, email];
   const text = `
-    insert into node.users (device_id, user_name, voice_hash, email) 
+    insert into users.users (device_id, user_name, voice_hash, email) 
     values ($1, $2, $3, $4)
     on conflict (device_id, user_name) do update
     set voice_hash = excluded.voice_hash, updated_at = now()
@@ -44,7 +44,7 @@ const getUser = async ({ deviceId }) => {
   const values = [deviceId];
   const { rows: [ user ] } = await readPool.query({
     text: `
-      select id, user_name, voice_hash, email from node.users where device_id = $1
+      select id, user_name, voice_hash, email from users.users where device_id = $1
       order by updated_at desc nulls last
       limit 1
     `,

@@ -42,7 +42,7 @@ export default {
   writePool,
   stage,
   storage,
-  voiceService: 'https://auth.speakease.co',
+  voiceService: 'https://voice-auth.int-t.com',
   telegram,
   voiceRecognitionThreshold,
   distanceLimit

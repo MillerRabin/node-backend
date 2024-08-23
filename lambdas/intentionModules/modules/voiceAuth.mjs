@@ -10,7 +10,7 @@ async function getJSON (response) {
 }
 
 export async function createHash(voiceData) {
-  const res = await fetch(`${config.voiceService}/createHash`, {
+  const res = await fetch(`${config.voiceService}/api/createHash`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ voiceData })
@@ -20,7 +20,7 @@ export async function createHash(voiceData) {
 }
 
 export async function compareHashes(embeddings, voiceData, threshold) {
-  const res = await fetch(`${config.voiceService}/compareHashes`, {
+  const res = await fetch(`${config.voiceService}/api/compareHashes`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ embeddings, voiceData, threshold })
